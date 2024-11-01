@@ -1,3 +1,4 @@
+import ArrivalSection from "./components/ArrivalSection/ArrivalSection";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
 function App() {
@@ -5,6 +6,7 @@ function App() {
     <>
       <Navbar />
       <HeroSection />
+      <ArrivalSection />
     </>
   );
 }
