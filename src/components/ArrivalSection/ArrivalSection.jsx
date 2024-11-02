@@ -9,6 +9,8 @@ const ArrivalSection = () => {
   const [filterCategory, setFilterCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [cartsData, setCartsData] = useState([]);
+
   const { fashionData, loading } = useFashionData(
     "https://fakestoreapi.com/products"
   );
@@ -37,19 +39,14 @@ const ArrivalSection = () => {
     setSearchTerm(search);
   };
 
-  const datas = fashionData
-    ?.filter((data) =>
-      data.title.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => {
-      if (sortOrder === "desc") {
-        return b.price - a.price;
-      } else if (sortOrder === "asc") {
-        return a.price - b.price;
-      } else {
-        return fashionData;
-      }
-    });
+  const handleAddToCart = (id) => {
+    if (cartsData.find((item) => item.id === id)) {
+      setCartsData((prevData) => prevData.filter((item) => item.id !== id));
+    } else {
+      const data = fashionData.find((item) => item.id === id);
+      setCartsData((prevData) => [...prevData, data]);
+    }
+  };
 
   return (
     <div>
@@ -69,6 +66,7 @@ const ArrivalSection = () => {
           onFilterCategory={handleFilterCategory}
           filterCategory={filterCategory}
           onSearch={handleSearch}
+          cartsData={cartsData}
         />
 
         {/* Arrival Card Section */}
@@ -76,6 +74,7 @@ const ArrivalSection = () => {
           <div className="bg-white">
             <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 lg:max-w-7xl lg:px-8">
               <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                {/* Showing loading splash screen till fetching data */}
                 {loading || loadingCategory ? (
                   <>
                     <LoadingSkeleton />
@@ -83,16 +82,54 @@ const ArrivalSection = () => {
                     <LoadingSkeleton />
                     <LoadingSkeleton />
                   </>
-                ) : filterCategory ? (
+                ) : // Displaying data based on filter category along with search and sort
+                filterCategory ? (
                   categoryData
                     ?.filter((data) =>
                       data.title
                         .toLowerCase()
                         .includes(searchTerm.toLowerCase())
                     )
-                    .map((data) => <ArrivalCard key={data.id} {...data} />)
+                    .sort((a, b) => {
+                      if (sortOrder === "desc") {
+                        return b.price - a.price;
+                      } else if (sortOrder === "asc") {
+                        return a.price - b.price;
+                      } else {
+                        return categoryData;
+                      }
+                    })
+                    .map((data) => (
+                      <ArrivalCard
+                        key={data.id}
+                        product={data}
+                        onCart={handleAddToCart}
+                      />
+                    ))
                 ) : (
-                  datas?.map((data) => <ArrivalCard key={data.id} {...data} />)
+                  // Displaying all data along with search and sort
+                  fashionData
+                    ?.filter((data) =>
+                      data.title
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                    )
+                    .sort((a, b) => {
+                      if (sortOrder === "desc") {
+                        return b.price - a.price;
+                      } else if (sortOrder === "asc") {
+                        return a.price - b.price;
+                      } else {
+                        return fashionData;
+                      }
+                    })
+                    ?.map((data) => (
+                      <ArrivalCard
+                        key={data.id}
+                        product={data}
+                        onCart={handleAddToCart}
+                      />
+                    ))
                 )}
               </div>
             </div>
