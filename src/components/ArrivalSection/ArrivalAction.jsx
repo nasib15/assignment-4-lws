@@ -1,14 +1,22 @@
+import { useState } from "react";
 import { CartIcon, DropdownIcon, SearchIcon } from "../SVG/IconSVG";
 import FilteringModal from "./FilteringModal";
 import SortingModal from "./SortingModal";
 
-const ArrivalAction = ({
-  onSort,
-  onFilter,
-  isFilterOpen,
-  isSortOpen,
-  toggleSort,
-}) => {
+const ArrivalAction = ({ toggleSort, onFilterCategory }) => {
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const handleSortOpen = () => {
+    setIsSortOpen(!isSortOpen);
+    setIsFilterOpen(false);
+  };
+
+  const handleFilterOpen = () => {
+    setIsFilterOpen(!isFilterOpen);
+    setIsSortOpen(false);
+  };
+
   return (
     <>
       <div className="mt-10">
@@ -20,7 +28,7 @@ const ArrivalAction = ({
                 <button
                   type="button"
                   className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-400 hover:text-gray-500 focus:text-gray-700 transition-all"
-                  onClick={onSort}
+                  onClick={handleSortOpen}
                 >
                   Sort
                   <DropdownIcon />
@@ -36,13 +44,15 @@ const ArrivalAction = ({
                 <button
                   type="button"
                   className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm text-gray-400 hover:text-gray-500 focus:text-gray-700 transition-all"
-                  onClick={onFilter}
+                  onClick={handleFilterOpen}
                 >
                   Filter
                   <DropdownIcon />
                 </button>
               </div>
-              {isFilterOpen && <FilteringModal />}
+              {isFilterOpen && (
+                <FilteringModal onFilterCategory={onFilterCategory} />
+              )}
             </div>
           </div>
 

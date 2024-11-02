@@ -5,24 +5,17 @@ import ArrivalCard from "./ArrivalCard";
 import LoadingSkeleton from "./LoadingSkeleton";
 
 const ArrivalSection = () => {
+  const [sortOrder, setSortOrder] = useState(null);
+  const [filterCategory, setFilterCategory] = useState(null);
+
   const { fashionData, loading } = useFashionData(
     "https://fakestoreapi.com/products"
   );
 
-  const [isSortOpen, setIsSortOpen] = useState(false);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  const [sortOrder, setSortOrder] = useState(null);
-
-  const handleSortOpen = () => {
-    setIsSortOpen(!isSortOpen);
-    setIsFilterOpen(false);
-  };
-
-  const handleFilterOpen = () => {
-    setIsFilterOpen(!isFilterOpen);
-    setIsSortOpen(false);
-  };
+  const { fashionData: categoryData, loading: loadingCategory } =
+    useFashionData(
+      `https://fakestoreapi.com/products/category/${filterCategory}`
+    );
 
   const toggleSort = (sortType) => {
     if (sortType === "desc") {
@@ -31,6 +24,12 @@ const ArrivalSection = () => {
     if (sortType === "asc") {
       setSortOrder("asc");
     }
+  };
+
+  const handleFilterCategory = (category) => {
+    setFilterCategory((prevCategory) =>
+      prevCategory === category ? null : category
+    );
   };
 
   const datas = fashionData?.sort((a, b) => {
@@ -57,11 +56,8 @@ const ArrivalSection = () => {
 
         {/* Sorting, Filtering and Searching Section */}
         <ArrivalAction
-          onSort={handleSortOpen}
-          onFilter={handleFilterOpen}
-          isSortOpen={isSortOpen}
-          isFilterOpen={isFilterOpen}
           toggleSort={toggleSort}
+          onFilterCategory={handleFilterCategory}
         />
 
         {/* Arrival Card Section */}
@@ -69,13 +65,17 @@ const ArrivalSection = () => {
           <div className="bg-white">
             <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 lg:max-w-7xl lg:px-8">
               <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                {loading ? (
+                {loading || loadingCategory ? (
                   <>
                     <LoadingSkeleton />
                     <LoadingSkeleton />
                     <LoadingSkeleton />
                     <LoadingSkeleton />
                   </>
+                ) : filterCategory ? (
+                  categoryData?.map((data) => (
+                    <ArrivalCard key={data.id} {...data} />
+                  ))
                 ) : (
                   datas?.map((data) => <ArrivalCard key={data.id} {...data} />)
                 )}
