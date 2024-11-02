@@ -1,18 +1,9 @@
-import { useState } from "react";
 import { useFashionData } from "../../hooks/useFashionData";
 
-const FilteringModal = ({ onFilterCategory }) => {
+const FilteringModal = ({ onFilterCategory, filterCategory }) => {
   const { fashionData: categories, loading } = useFashionData(
     "https://fakestoreapi.com/products/categories"
   );
-
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  const handleCategory = (category) => {
-    setSelectedCategory((prevCategory) =>
-      prevCategory === category ? null : category
-    );
-  };
 
   return (
     <div className="absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
@@ -28,14 +19,13 @@ const FilteringModal = ({ onFilterCategory }) => {
               key={index}
               id={index}
               onChange={() => {
-                handleCategory(category);
                 onFilterCategory(category);
               }}
             >
               <input
                 type="checkbox"
                 className="form-checkbox h-4 w-4"
-                checked={selectedCategory === category}
+                checked={filterCategory === category}
               />
               <span className="ml-2">{category}</span>
             </label>

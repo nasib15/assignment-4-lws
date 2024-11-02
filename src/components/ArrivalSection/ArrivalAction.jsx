@@ -3,9 +3,15 @@ import { CartIcon, DropdownIcon, SearchIcon } from "../SVG/IconSVG";
 import FilteringModal from "./FilteringModal";
 import SortingModal from "./SortingModal";
 
-const ArrivalAction = ({ toggleSort, onFilterCategory }) => {
+const ArrivalAction = ({
+  toggleSort,
+  onFilterCategory,
+  filterCategory,
+  onSearch,
+}) => {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleSortOpen = () => {
     setIsSortOpen(!isSortOpen);
@@ -51,7 +57,10 @@ const ArrivalAction = ({ toggleSort, onFilterCategory }) => {
                 </button>
               </div>
               {isFilterOpen && (
-                <FilteringModal onFilterCategory={onFilterCategory} />
+                <FilteringModal
+                  onFilterCategory={onFilterCategory}
+                  filterCategory={filterCategory}
+                />
               )}
             </div>
           </div>
@@ -64,7 +73,11 @@ const ArrivalAction = ({ toggleSort, onFilterCategory }) => {
                 className="block w-full appearance-none bg-transparent text-base text-gray-700 placeholder:text-gray-400 focus:outline-none placeholder:text-sm sm:text-sm sm:leading-6"
                 placeholder="Find anything..."
                 type="text"
-                value=""
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  onSearch(e.target.value);
+                }}
               />
             </div>
 

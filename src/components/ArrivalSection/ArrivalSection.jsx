@@ -7,6 +7,7 @@ import LoadingSkeleton from "./LoadingSkeleton";
 const ArrivalSection = () => {
   const [sortOrder, setSortOrder] = useState(null);
   const [filterCategory, setFilterCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { fashionData, loading } = useFashionData(
     "https://fakestoreapi.com/products"
@@ -32,15 +33,23 @@ const ArrivalSection = () => {
     );
   };
 
-  const datas = fashionData?.sort((a, b) => {
-    if (sortOrder === "desc") {
-      return b.price - a.price;
-    } else if (sortOrder === "asc") {
-      return a.price - b.price;
-    } else {
-      return fashionData;
-    }
-  });
+  const handleSearch = (search) => {
+    setSearchTerm(search);
+  };
+
+  const datas = fashionData
+    ?.filter((data) =>
+      data.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortOrder === "desc") {
+        return b.price - a.price;
+      } else if (sortOrder === "asc") {
+        return a.price - b.price;
+      } else {
+        return fashionData;
+      }
+    });
 
   return (
     <div>
@@ -58,6 +67,8 @@ const ArrivalSection = () => {
         <ArrivalAction
           toggleSort={toggleSort}
           onFilterCategory={handleFilterCategory}
+          filterCategory={filterCategory}
+          onSearch={handleSearch}
         />
 
         {/* Arrival Card Section */}
@@ -73,9 +84,13 @@ const ArrivalSection = () => {
                     <LoadingSkeleton />
                   </>
                 ) : filterCategory ? (
-                  categoryData?.map((data) => (
-                    <ArrivalCard key={data.id} {...data} />
-                  ))
+                  categoryData
+                    ?.filter((data) =>
+                      data.title
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                    )
+                    .map((data) => <ArrivalCard key={data.id} {...data} />)
                 ) : (
                   datas?.map((data) => <ArrivalCard key={data.id} {...data} />)
                 )}
