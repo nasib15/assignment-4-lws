@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useFashionData } from "../../hooks/useFashionData";
 import ArrivalAction from "./ArrivalAction";
 import ArrivalCard from "./ArrivalCard";
@@ -7,6 +8,41 @@ const ArrivalSection = () => {
   const { fashionData, loading } = useFashionData(
     "https://fakestoreapi.com/products"
   );
+
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const [sortOrder, setSortOrder] = useState(null);
+
+  const handleSortOpen = () => {
+    setIsSortOpen(!isSortOpen);
+    setIsFilterOpen(false);
+  };
+
+  const handleFilterOpen = () => {
+    setIsFilterOpen(!isFilterOpen);
+    setIsSortOpen(false);
+  };
+
+  const toggleSort = (sortType) => {
+    if (sortType === "desc") {
+      setSortOrder("desc");
+    }
+    if (sortType === "asc") {
+      setSortOrder("asc");
+    }
+  };
+
+  const datas = fashionData?.sort((a, b) => {
+    if (sortOrder === "desc") {
+      return b.price - a.price;
+    } else if (sortOrder === "asc") {
+      return a.price - b.price;
+    } else {
+      return fashionData;
+    }
+  });
+
   return (
     <div>
       <div className="pt-16 sm:pt-24 lg:pt-40">
@@ -20,7 +56,13 @@ const ArrivalSection = () => {
         </div>
 
         {/* Sorting, Filtering and Searching Section */}
-        <ArrivalAction />
+        <ArrivalAction
+          onSort={handleSortOpen}
+          onFilter={handleFilterOpen}
+          isSortOpen={isSortOpen}
+          isFilterOpen={isFilterOpen}
+          toggleSort={toggleSort}
+        />
 
         {/* Arrival Card Section */}
         <div>
@@ -35,9 +77,7 @@ const ArrivalSection = () => {
                     <LoadingSkeleton />
                   </>
                 ) : (
-                  fashionData?.map((data) => (
-                    <ArrivalCard key={data.id} {...data} />
-                  ))
+                  datas?.map((data) => <ArrivalCard key={data.id} {...data} />)
                 )}
               </div>
             </div>
