@@ -1,4 +1,5 @@
 import { heroImageData } from "../data/hero-image-data";
+// For religious reasons, I have changed some images.
 
 const HeroSection = () => {
   return (

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useFashionData } from "../../hooks/useFashionData";
 import ArrivalAction from "./ArrivalAction";
 import ArrivalCard from "./ArrivalCard";
@@ -11,7 +12,7 @@ const ArrivalSection = () => {
 
   const [cartsData, setCartsData] = useState([]);
 
-  const { fashionData, loading } = useFashionData(
+  const { fashionData, loading, error } = useFashionData(
     "https://fakestoreapi.com/products"
   );
 
@@ -47,6 +48,10 @@ const ArrivalSection = () => {
       setCartsData((prevData) => [...prevData, data]);
     }
   };
+
+  if (error) {
+    toast.error(error?.message);
+  }
 
   return (
     <div>

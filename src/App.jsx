@@ -1,7 +1,10 @@
+import { ToastContainer } from "react-toastify";
 import ArrivalSection from "./components/ArrivalSection/ArrivalSection";
 import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
+
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <>
@@ -9,6 +12,7 @@ function App() {
       <HeroSection />
       <ArrivalSection />
       <Footer />
+      <ToastContainer />
     </>
   );
 }

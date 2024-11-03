@@ -13,7 +13,7 @@ export const useFashionData = (url) => {
         const response = await fetch(url);
 
         if (!response.ok) {
-          const errorMessage = `Fetching weather data failed: ${response.status}`;
+          const errorMessage = `Fetching fashion data failed: ${response.status}`;
           throw new Error(errorMessage);
         }
 

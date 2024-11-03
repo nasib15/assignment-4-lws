@@ -1,3 +1,5 @@
+// For religious reasons, I have changed some images.
+
 export const heroImageData = [
   {
     id: 1,
