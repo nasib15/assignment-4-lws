@@ -12,7 +12,7 @@ function App() {
       <HeroSection />
       <ArrivalSection />
       <Footer />
-      <ToastContainer />
+      <ToastContainer pauseOnFocusLoss={false} limit={3} />
     </>
   );
 }

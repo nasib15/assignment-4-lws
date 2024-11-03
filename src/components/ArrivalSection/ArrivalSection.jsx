@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import useDebounce from "../../hooks/useDebounce";
 import { useFashionData } from "../../hooks/useFashionData";
 import ArrivalAction from "./ArrivalAction";
 import ArrivalCard from "./ArrivalCard";
@@ -21,6 +22,11 @@ const ArrivalSection = () => {
       `https://fakestoreapi.com/products/category/${filterCategory}`
     );
 
+  // search debounce
+  const debounceSearch = useDebounce((search) => {
+    setSearchTerm(search);
+  }, 700);
+
   const toggleSort = (sortType) => {
     if (sortType === "desc") {
       setSortOrder("desc");
@@ -37,7 +43,7 @@ const ArrivalSection = () => {
   };
 
   const handleSearch = (search) => {
-    setSearchTerm(search);
+    debounceSearch(search);
   };
 
   const handleAddToCart = (id) => {
@@ -50,7 +56,9 @@ const ArrivalSection = () => {
   };
 
   if (error) {
-    toast.error(error?.message);
+    toast.error(error?.message, {
+      position: "top-center",
+    });
   }
 
   return (
