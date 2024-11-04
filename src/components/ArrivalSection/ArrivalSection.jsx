@@ -30,9 +30,10 @@ const ArrivalSection = () => {
   const toggleSort = (sortType) => {
     if (sortType === "desc") {
       setSortOrder("desc");
-    }
-    if (sortType === "asc") {
+    } else if (sortType === "asc") {
       setSortOrder("asc");
+    } else {
+      setSortOrder(null);
     }
   };
 
