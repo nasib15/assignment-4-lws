@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { CartIcon, DropdownIcon, SearchIcon } from "../SVG/IconSVG";
+import { useRef, useState } from "react";
+import { CartIcon, CloseIcon, DropdownIcon, SearchIcon } from "../SVG/IconSVG";
 import FilteringModal from "./FilteringModal";
 import SortingModal from "./SortingModal";
 
@@ -13,6 +13,7 @@ const ArrivalAction = ({
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const inputRef = useRef(null);
 
   const handleSortOpen = () => {
     setIsSortOpen(!isSortOpen);
@@ -79,7 +80,18 @@ const ArrivalAction = ({
                   setSearch(e.target.value);
                   onSearch(e.target.value);
                 }}
+                ref={inputRef}
               />
+              <button
+                className={`${search ? "block" : "hidden"} transition-all`}
+                onClick={() => {
+                  setSearch("");
+                  onSearch("");
+                  inputRef.current.focus();
+                }}
+              >
+                <CloseIcon />
+              </button>
             </div>
 
             {/* Cart */}

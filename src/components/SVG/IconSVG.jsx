@@ -88,3 +88,34 @@ export const ShopIcon = () => {
     </svg>
   );
 };
+
+export const CloseIcon = () => {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect width="14" height="14" rx="3" fill="#FF3B3B" />
+      <line
+        x1="4"
+        y1="4"
+        x2="10"
+        y2="10"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <line
+        x1="10"
+        y1="4"
+        x2="4"
+        y2="10"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+};
