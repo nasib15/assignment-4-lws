@@ -43,7 +43,7 @@ const ArrivalSection = () => {
   };
 
   const handleSearch = (search) => {
-    debounceSearch(search);
+    debounceSearch(search.replace(/\s+/g, " ")); // Remove extra spaces
   };
 
   const handleAddToCart = (id) => {
@@ -60,6 +60,8 @@ const ArrivalSection = () => {
       position: "top-center",
     });
   }
+
+  console.log(categoryData);
 
   return (
     <div>
@@ -97,13 +99,20 @@ const ArrivalSection = () => {
                   </>
                 ) : // Displaying data based on filter category along with search and sort
                 filterCategory ? (
+                  (categoryData?.filter((data) =>
+                    data.title.toLowerCase().includes(searchTerm.toLowerCase())
+                  )?.length === 0 && (
+                    <p className="col-span-full text-3xl font-bold text-center">
+                      No Products Found
+                    </p>
+                  )) ||
                   categoryData
                     ?.filter((data) =>
                       data.title
                         .toLowerCase()
                         .includes(searchTerm.toLowerCase())
                     )
-                    .sort((a, b) => {
+                    ?.sort((a, b) => {
                       if (sortOrder === "desc") {
                         return b.price - a.price;
                       } else if (sortOrder === "asc") {
@@ -117,10 +126,18 @@ const ArrivalSection = () => {
                         key={data.id}
                         product={data}
                         onCart={handleAddToCart}
+                        cartsData={cartsData}
                       />
                     ))
                 ) : (
                   // Displaying all data along with search and sort
+                  (fashionData?.filter((data) =>
+                    data.title.toLowerCase().includes(searchTerm.toLowerCase())
+                  )?.length === 0 && (
+                    <p className="col-span-full text-3xl font-bold text-center">
+                      No Products Found
+                    </p>
+                  )) ||
                   fashionData
                     ?.filter((data) =>
                       data.title
@@ -141,6 +158,7 @@ const ArrivalSection = () => {
                         key={data.id}
                         product={data}
                         onCart={handleAddToCart}
+                        cartsData={cartsData}
                       />
                     ))
                 )}

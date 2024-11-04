@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { ShopIcon } from "../SVG/IconSVG";
 
-const ArrivalCard = ({ product, onCart }) => {
+const ArrivalCard = ({ product, onCart, cartsData }) => {
   const { id, title, price, category, image } = product;
-  const [isAddToCart, setIsAddToCart] = useState(false);
+  const isAddToCart = cartsData.find((item) => item.id === id);
 
   return (
     <>
@@ -24,15 +23,13 @@ const ArrivalCard = ({ product, onCart }) => {
         </div>
         <div className="cursor-pointer rounded-md bg-white text-[0.8125rem] font-medium leading-5 text-slate-700 ring-1 ring-slate-700/10  hover:ring-1 hover:bg-slate-50 hover:text-slate-900 items-center text-center mb-3 mx-3 flex-1">
           <div
-            className={
-              `flex px-3 py-2 justify-center` +
-              (isAddToCart
+            className={`flex px-3 py-2 justify-center ${
+              isAddToCart
                 ? " bg-red-600 hover:bg-red-700 text-white rounded-md"
-                : "")
-            }
+                : ""
+            }`}
             onClick={() => {
               onCart(id);
-              setIsAddToCart(!isAddToCart);
             }}
           >
             <ShopIcon />
