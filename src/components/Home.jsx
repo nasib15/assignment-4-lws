@@ -1,4 +1,5 @@
 import CartProvider from "../providers/CartProvider";
+import SearchProvider from "../providers/SearchProvider";
 import ArrivalSection from "./ArrivalSection/ArrivalSection";
 import Footer from "./Footer";
 import HeroSection from "./HeroSection";
@@ -9,9 +10,11 @@ const Home = () => {
     <>
       <Navbar />
       <HeroSection />
-      <CartProvider>
-        <ArrivalSection />
-      </CartProvider>
+      <SearchProvider>
+        <CartProvider>
+          <ArrivalSection />
+        </CartProvider>
+      </SearchProvider>
       <Footer />
     </>
   );

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useDebounce from "../../hooks/useDebounce";
 import { useFashionData } from "../../hooks/useFashionData";
+import useSearch from "../../hooks/useSearch";
 import ArrivalAction from "./ArrivalAction";
 import ArrivalCard from "./ArrivalCard";
 import LoadingSkeleton from "./LoadingSkeleton";
@@ -9,12 +10,14 @@ import LoadingSkeleton from "./LoadingSkeleton";
 const ArrivalSection = () => {
   const [sortOrder, setSortOrder] = useState(null);
   const [filterCategory, setFilterCategory] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const { search, setSearch } = useSearch();
 
+  // fetching data
   const { fashionData, loading, error } = useFashionData(
     "https://fakestoreapi.com/products"
   );
 
+  // fetching category data
   const { fashionData: categoryData, loading: loadingCategory } =
     useFashionData(
       `https://fakestoreapi.com/products/category/${filterCategory}`
@@ -22,9 +25,10 @@ const ArrivalSection = () => {
 
   // search debounce
   const debounceSearch = useDebounce((search) => {
-    setSearchTerm(search);
+    setSearch(search);
   }, 700);
 
+  // sorting
   const toggleSort = (sortType) => {
     if (sortType === "desc") {
       setSortOrder("desc");
@@ -35,16 +39,19 @@ const ArrivalSection = () => {
     }
   };
 
+  // filtering category
   const handleFilterCategory = (category) => {
     setFilterCategory((prevCategory) =>
       prevCategory === category ? null : category
     );
   };
 
+  // search
   const handleSearch = (search) => {
     debounceSearch(search.replace(/\s+/g, " ")); // Remove extra spaces
   };
 
+  // error handling
   if (error) {
     toast.error(error?.message, {
       position: "top-center",
@@ -87,7 +94,7 @@ const ArrivalSection = () => {
                 ) : // Displaying data based on filter category along with search and sort
                 filterCategory ? (
                   (categoryData?.filter((data) =>
-                    data.title.toLowerCase().includes(searchTerm.toLowerCase())
+                    data.title.toLowerCase().includes(search.toLowerCase())
                   )?.length === 0 && (
                     <p className="col-span-full text-3xl font-bold text-center">
                       No Products Found
@@ -95,9 +102,7 @@ const ArrivalSection = () => {
                   )) ||
                   categoryData
                     ?.filter((data) =>
-                      data.title
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
+                      data.title.toLowerCase().includes(search.toLowerCase())
                     )
                     ?.sort((a, b) => {
                       if (sortOrder === "desc") {
@@ -112,7 +117,7 @@ const ArrivalSection = () => {
                 ) : (
                   // Displaying all data along with search and sort
                   (fashionData?.filter((data) =>
-                    data.title.toLowerCase().includes(searchTerm.toLowerCase())
+                    data.title.toLowerCase().includes(search.toLowerCase())
                   )?.length === 0 && (
                     <p className="col-span-full text-3xl font-bold text-center">
                       No Products Found
@@ -120,9 +125,7 @@ const ArrivalSection = () => {
                   )) ||
                   fashionData
                     ?.filter((data) =>
-                      data.title
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
+                      data.title.toLowerCase().includes(search.toLowerCase())
                     )
                     .sort((a, b) => {
                       if (sortOrder === "desc") {
