@@ -1,8 +1,18 @@
+import useCartsData from "../../hooks/useCartsData";
 import { ShopIcon } from "../SVG/IconSVG";
 
-const ArrivalCard = ({ product, onCart, cartsData }) => {
+const ArrivalCard = ({ product }) => {
   const { id, title, price, category, image } = product;
+  const { cartsData, setCartsData } = useCartsData();
   const isAddToCart = cartsData.find((item) => item.id === id);
+
+  const handleAddToCart = (id) => {
+    if (isAddToCart) {
+      setCartsData((prevData) => prevData.filter((item) => item.id !== id));
+    } else {
+      setCartsData((prevData) => [...prevData, product]);
+    }
+  };
 
   return (
     <div className="relative h-full flex flex-col">
@@ -28,7 +38,7 @@ const ArrivalCard = ({ product, onCart, cartsData }) => {
                 ? "bg-red-600 hover:bg-red-700 text-white rounded-md"
                 : ""
             }`}
-            onClick={() => onCart(id)}
+            onClick={() => handleAddToCart(id)}
           >
             <ShopIcon />
             {isAddToCart ? "Remove from Cart" : "Add to Cart"}

@@ -11,8 +11,6 @@ const ArrivalSection = () => {
   const [filterCategory, setFilterCategory] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [cartsData, setCartsData] = useState([]);
-
   const { fashionData, loading, error } = useFashionData(
     "https://fakestoreapi.com/products"
   );
@@ -47,22 +45,11 @@ const ArrivalSection = () => {
     debounceSearch(search.replace(/\s+/g, " ")); // Remove extra spaces
   };
 
-  const handleAddToCart = (id) => {
-    if (cartsData.find((item) => item.id === id)) {
-      setCartsData((prevData) => prevData.filter((item) => item.id !== id));
-    } else {
-      const data = fashionData.find((item) => item.id === id);
-      setCartsData((prevData) => [...prevData, data]);
-    }
-  };
-
   if (error) {
     toast.error(error?.message, {
       position: "top-center",
     });
   }
-
-  console.log(categoryData);
 
   return (
     <div>
@@ -82,7 +69,6 @@ const ArrivalSection = () => {
           onFilterCategory={handleFilterCategory}
           filterCategory={filterCategory}
           onSearch={handleSearch}
-          cartsData={cartsData}
         />
 
         {/* Arrival Card Section */}
@@ -122,14 +108,7 @@ const ArrivalSection = () => {
                         return categoryData;
                       }
                     })
-                    .map((data) => (
-                      <ArrivalCard
-                        key={data.id}
-                        product={data}
-                        onCart={handleAddToCart}
-                        cartsData={cartsData}
-                      />
-                    ))
+                    .map((data) => <ArrivalCard key={data.id} product={data} />)
                 ) : (
                   // Displaying all data along with search and sort
                   (fashionData?.filter((data) =>
@@ -155,12 +134,7 @@ const ArrivalSection = () => {
                       }
                     })
                     ?.map((data) => (
-                      <ArrivalCard
-                        key={data.id}
-                        product={data}
-                        onCart={handleAddToCart}
-                        cartsData={cartsData}
-                      />
+                      <ArrivalCard key={data.id} product={data} />
                     ))
                 )}
               </div>

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import useCartsData from "../../hooks/useCartsData";
 import { CartIcon, CloseIcon, DropdownIcon, SearchIcon } from "../SVG/IconSVG";
 import FilteringModal from "./FilteringModal";
 import SortingModal from "./SortingModal";
@@ -8,12 +9,12 @@ const ArrivalAction = ({
   onFilterCategory,
   filterCategory,
   onSearch,
-  cartsData,
 }) => {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [search, setSearch] = useState("");
   const inputRef = useRef(null);
+  const { cartsData } = useCartsData();
 
   const handleSortOpen = () => {
     setIsSortOpen(!isSortOpen);
