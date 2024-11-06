@@ -23,6 +23,19 @@ const ArrivalSection = () => {
       `https://fakestoreapi.com/products/category/${filterCategory}`
     );
 
+  // filtering category
+  const handleFilterCategory = (category) => {
+    setFilterCategory((prevCategory) =>
+      prevCategory === category ? null : category
+    );
+  };
+
+  // search
+  const handleSearch = (search) => {
+    console.log(search.replace(/\s+/g, " ").trim());
+    debounceSearch(search.replace(/\s+/g, " ").trim()); // Remove extra spaces
+  };
+
   // search debounce
   const debounceSearch = useDebounce((search) => {
     setSearch(search);
@@ -37,18 +50,6 @@ const ArrivalSection = () => {
     } else {
       setSortOrder(null);
     }
-  };
-
-  // filtering category
-  const handleFilterCategory = (category) => {
-    setFilterCategory((prevCategory) =>
-      prevCategory === category ? null : category
-    );
-  };
-
-  // search
-  const handleSearch = (search) => {
-    debounceSearch(search.replace(/\s+/g, " ")); // Remove extra spaces
   };
 
   // error handling
