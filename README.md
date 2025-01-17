@@ -44,7 +44,7 @@
 1. **Clone the repository:**
 
    ```
-   git clone assignment-4-lws
+   git clone https://github.com/nasib15/assignment-4-lws.git
    cd assignment-4-lws
    ```
 
